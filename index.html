@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Listado de Empleados</title>
+    <link rel="stylesheet" href="./static/css/index.css" />
+    <link rel="stylesheet" href="./static/vendor/bootstrap.min.css" />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+
+  <body>
+    <div class="alert alert-success d-none" role="alert"></div>
+    <div class="alert alert-danger d-none" role="alert"></div>
+
+    <nav>
+      <a href="https://agenciadeaprendizaje.bue.edu.ar/" target="_blank">
+        <img
+          src="./static/imagenes/logos-nav.webp"
+          alt="Logo agencia de aprendizaje"
+        />
+      </a>
+      <a
+        href="https://agenciadeaprendizaje.bue.edu.ar/codo-a-codo/"
+        target="_blank"
+        ><img src="./static/imagenes/logo_Codo.jpg" alt="Logo codo a codo"
+      /></a>
+    </nav>
+
+    <section class="topSection">
+      <div class="searchSection">
+        <form id="searchEmployeeForm">
+          <div class="topSectionLeftCol">
+            <input
+              type="text"
+              id="searchEmployeeInput"
+              class="form-control"
+              placeholder="Buscar..."
+            />
+            <button type="submit" class="btn btn-outline-secondary">
+              <i class="fas fa-search"></i>
+            </button>
+          </div>
+          <div class="topSectionRightCol">
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="searchByName"
+                name="searchType"
+                checked
+              />
+              <label class="form-check-label" for="searchByName"
+                >Buscar por nombre</label
+              >
+            </div>
+            <div class="form-check">
+              <input
+                class="form-check-input"
+                type="radio"
+                id="searchById"
+                name="searchType"
+              />
+              <label class="form-check-label" for="searchById"
+                >Buscar por identificador</label
+              >
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="manageListorsomething">
+        <!-- sort by, "list all", "create new" -->
+      </div>
+    </section>
+
+    <h1>.</h1>
+    <!--
+      No se por que, pero si se quita este h1 se rompe todo.
+      Estuve media hora arreglandolo, no pude.
+      Lo oculte afuera de la pantalla.
+      Admito derrota.
+    -->
+
+    <div class="container">
+      <div class="employeeList"></div>
+    </div>
+
+    <script src="./static/vendor/bootstrap.bundle.min.js"></script>
+    <script src="./static/js/index.js"></script>
+  </body>
+</html>

@@ -1,0 +1,173 @@
+/* Estilos para todo el proyecto */
+@import url('https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap');
+
+* {
+    font-family: 'Quicksand', sans-serif;
+    margin: 0;
+}
+
+
+.alert {
+    position: fixed !important;
+    z-index: 3;
+    right: 20px;
+    bottom: 20px;
+}
+
+.slide-in-right {
+    animation: slideInRight 0.5s forwards;
+}
+
+.slide-out-right {
+    animation: slideOutRight 0.5s forwards;
+}
+
+nav {
+    position: fixed !important;
+    top: 0;
+    left: 0;
+    margin: 0;
+    padding: 0;
+    width: 100vw;
+    height: 100px;
+    background-color: #390E8C;
+    box-shadow: 10px 10px 20px rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    overflow: hidden;
+}
+
+nav a {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+nav a img {
+    height: 80%;
+}
+
+nav a:first-child {
+    float: left;
+    left: 50px;
+}
+
+nav a:last-child {
+    float: right;
+    right: 50px;
+}
+
+
+.topSection {
+    margin-top: 150px;
+}
+
+#searchEmployeeForm {
+    max-width: 99vw;
+}
+
+.topSectionLeftCol {
+    width: 59%;
+    position: relative;
+    float: left;
+}
+
+.topSectionLeftCol input[type="text"] {
+    width: 50%;
+    height: 50px;
+    font-size: 20px;
+    padding: 5px;
+    border: 1px solid #000;
+    border-right: 0;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 0 !important;
+    border-bottom-right-radius: 0 !important;
+    position: absolute;
+    right: 40px;
+}
+
+.topSectionLeftCol button {
+    position: absolute;
+    top: 0;
+    right: 0;
+    border: 1px solid #000;
+    border-left: none;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom-left-radius: 0 !important;
+    border-top-left-radius: 0 !important;
+    background: transparent;
+    color: #000;
+    width: 40px;
+    height: 50px;
+}
+
+.topSectionLeftCol button:hover {
+    cursor: pointer;
+}
+
+.topSectionLeftCol button:hover i {
+    transform: scale(1.2);
+}
+
+.topSectionLeftCol button i {
+    font-size: 20px;
+    transition: transform 0.3s ease;
+}
+
+.topSectionRightCol {
+    width: 40%;
+    float: right;
+}
+
+
+
+
+
+
+h1 {
+    position: relative;
+    right: 50px;
+}
+
+.employeeList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(500px, 500px));
+    gap: 20px;
+    justify-content: center;
+    margin: 50px 0;
+}
+
+.card-body img {
+    position: relative;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 150px;
+    height: 150px;
+}
+
+
+
+
+
+
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideOutRight {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(120%);
+    }
+}
