@@ -9,17 +9,33 @@ document.addEventListener("DOMContentLoaded", () => {
 	getEmployees();
 });
 
-function getEmployees() {
-	fetch(APIURL + "empleados")
-		.then((response) => {
-			if (response.ok) return response.json();
-			displayAlert(true, response.mensaje);
-			throw new Error(response.mensaje);
-		})
-		.then((data) => displayEmployees(data))
-		.catch((error) => {
-			console.error("Error:", error);
-		});
+async function getEmployees() {
+	try {
+		const response = await fetch(APIURL + "empleados");
+		let data = await response.json();
+		if (data.error) {
+			displayAlert(true, data.error);
+			throw new Error(data.error);
+		}
+		displayEmployees(data);
+	} catch (error) {
+		console.error('Error:', error);
+	}
+}
+
+async function searchEmployee(userQuery) {
+	try {
+		const response = await fetch(APIURL + "empleados/" + userQuery);
+		let data = await response.json();
+		if (data.error) {
+			displayAlert(true, data.error);
+			throw new Error(data.error);
+		}
+		if (!Array.isArray(data)) data = [data];
+		displayEmployees(data);
+	} catch (error) {
+		console.error('Error:', error);
+	}
 }
 
 function handleSearchForm(e) {
@@ -48,18 +64,25 @@ function handleSearchForm(e) {
 	searchEmployee(userQuery);
 }
 
-async function searchEmployee(userQuery) {
-	try {
-		const response = await fetch(APIURL + "empleados/" + userQuery);
-		let data = await response.json();
-		if (data.mensaje) {
-			displayAlert(true, data.mensaje);
-			throw new Error(data.mensaje);
+function displayEditEmployee(employee) {
+	console.log('asd');
+}
+
+async function deleteEmployee(empId, fullname) {
+	if (confirm(`Esta seguro que desea eliminar al empleado '${fullname}'?`)) {
+		try {
+			const response = await fetch(APIURL + "empleados/" + empId, { method: 'DELETE' });
+			const data = await response.json();
+			if (data.error) {
+				displayAlert(true, data.error);
+				throw new Error(data.error);
+			}
+			displayAlert(false, data.mensaje);
+			const cardToDel = document.querySelector('[data-emp-id="' + empId + '"]');
+			if (cardToDel) cardToDel.remove();
+		} catch (error) {
+			console.error('Error:', error);
 		}
-		if (!Array.isArray(data)) data = [data];
-		displayEmployees(data);
-	} catch (error) {
-		console.error('Error:', error);
 	}
 }
 
@@ -70,6 +93,7 @@ function displayEmployees(empleados) {
 	for (let empleado of empleados) {
 		const cardContainer = document.createElement("div");
 		cardContainer.classList.add("card");
+		cardContainer.setAttribute('data-emp-id', empleado.id)
 
 		const cardHeaderContainer = document.createElement("div");
 		cardHeaderContainer.classList.add("card-header");
@@ -80,6 +104,18 @@ function displayEmployees(empleados) {
 		strongName.textContent = `${empleado.firstname} ${empleado.lastname}`;
 
 		cardHeaderContainer.appendChild(strongName);
+
+		const editIcon = document.createElement('i');
+		editIcon.classList.add('fas');
+		editIcon.classList.add('fa-pen-to-square');
+		editIcon.addEventListener('click', () => displayEditEmployee(empleado));
+		cardHeaderContainer.appendChild(editIcon);
+
+		const deleteIcon = document.createElement('i');
+		deleteIcon.classList.add('fas');
+		deleteIcon.classList.add('fa-trash');
+		deleteIcon.addEventListener('click', () => deleteEmployee(empleado.id, `${empleado.firstname} ${empleado.lastname}`));
+		cardHeaderContainer.appendChild(deleteIcon);
 
 		const cardBodyContainer = document.createElement("div");
 		cardBodyContainer.classList.add("card-body");
@@ -153,7 +189,7 @@ function displayAlert(errorAlert, message) {
 
 	let alertElem = "";
 	if (errorAlert) alertElem = document.querySelector('.alert-danger');
-	else alertElem = document.querySelector('.alert-danger');
+	else alertElem = document.querySelector('.alert-success');
 
 	alertElem.textContent = message;
 

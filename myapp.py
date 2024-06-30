@@ -95,7 +95,7 @@ class GestionEmpleados:
         return self.cursor.rowcount > 0
 
     def eliminar_empleado(self, id):
-        self.cursor.execute("DELETE FROM employees WHERE id = %s", (id))
+        self.cursor.execute("DELETE FROM employees WHERE id = %s", (id,))
         self.conn.commit()
         return self.cursor.rowcount > 0
 
@@ -119,7 +119,7 @@ def mostrar_empleado(userquery):
         if empleado:
             return jsonify(empleado), 200
         else:
-            return jsonify({"mensaje": "Empleado no encontrado"}), 404
+            return jsonify({"error": "Empleado no encontrado"}), 404
     else:
         lista_empleados = empleados.consultar_empleado_nombre(userquery)
         return jsonify(lista_empleados)
@@ -144,7 +144,7 @@ def agregar_empleado():
             201,
         )
     else:
-        return jsonify({"mensaje": "Error del servidor al agregar empleado"}), 500
+        return jsonify({"error": "Error del servidor al agregar empleado"}), 500
 
 
 @app.route("/empleados/<int:id>", methods=["PUT"])
@@ -163,7 +163,7 @@ def modificar_empleado(id):
     ):
         return jsonify({"mensaje": "Empleado modificado correctamente"}), 200
     else:
-        return jsonify({"mensaje": "Empleado no encontrado o no hubo cambios"}), 404
+        return jsonify({"error": "Empleado no encontrado o no hubo cambios"}), 404
 
 
 @app.route("/empleados/<int:id>", methods=["DELETE"])
@@ -174,7 +174,7 @@ def eliminar_empleado(id):
         return (
             jsonify(
                 {
-                    "mensaje": "Error del servidor al eliminar empleado o empleado no encontrado"
+                    "error": "Error del servidor al eliminar empleado o empleado no encontrado"
                 }
             ),
             500,

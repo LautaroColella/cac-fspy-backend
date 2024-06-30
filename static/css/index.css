@@ -86,7 +86,45 @@ nav a:last-child {
     right: 40px;
 }
 
-.topSectionLeftCol button {
+.topSectionLeftCol #createEmployee {
+    background-color: rgb(0, 175, 0);
+    border: 1px solid #000;
+    border-radius: 10px;
+    color: #fff;
+    padding: 5px;
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    right: calc(50px + 50%);
+    top: 0;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.topSectionLeftCol #createEmployee::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 300%;
+    height: 300%;
+    background-color: rgb(0, 200, 0);
+    border-radius: 50%;
+    transition: transform 0.5s ease;
+    transform: translate(-50%, -50%) scale(0);
+    z-index: -1;
+}
+
+#createEmployee:hover::before {
+    transform: translate(-50%, -50%) scale(1);
+}
+
+#createEmployee:hover {
+    border: 2px solid #000;
+}
+
+
+.topSectionLeftCol button[type="submit"] {
     position: absolute;
     top: 0;
     right: 0;
@@ -96,21 +134,19 @@ nav a:last-child {
     border-bottom-right-radius: 10px;
     border-bottom-left-radius: 0 !important;
     border-top-left-radius: 0 !important;
-    background: transparent;
-    color: #000;
     width: 40px;
     height: 50px;
 }
 
-.topSectionLeftCol button:hover {
+.topSectionLeftCol button[type="submit"]:hover {
     cursor: pointer;
 }
 
-.topSectionLeftCol button:hover i {
+.topSectionLeftCol button[type="submit"]:hover i {
     transform: scale(1.2);
 }
 
-.topSectionLeftCol button i {
+.topSectionLeftCol button[type="submit"] i {
     font-size: 20px;
     transition: transform 0.3s ease;
 }
@@ -120,11 +156,10 @@ nav a:last-child {
     float: right;
 }
 
-
-
-
-
-
+.topSectionRightCol .form-check:hover label {
+    font-weight: 700;
+    cursor: pointer;
+}
 
 .employeeList {
     display: grid;
@@ -142,9 +177,27 @@ nav a:last-child {
     height: 150px;
 }
 
+.card-header i {
+    position: absolute;
+    transition: transform 0.3s ease-in;
+    top: 8px;
+    padding: 5px;
+}
 
+.card-header i:hover {
+    cursor: pointer;
+    outline: 1px solid #000;
+}
 
+.card-header i.fa-pen-to-square {
+    color: yellow;
+    right: 35px;
+}
 
+.card-header i.fa-trash {
+    color: rgb(215, 0, 0);
+    right: 5px;
+}
 
 
 
