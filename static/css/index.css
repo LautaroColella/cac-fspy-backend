@@ -125,10 +125,6 @@ nav a:last-child {
 
 
 
-h1 {
-    position: relative;
-    right: 50px;
-}
 
 .employeeList {
     display: grid;

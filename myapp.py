@@ -40,25 +40,45 @@ class GestionEmpleados:
         self.cursor.close()
         self.cursor = self.conn.cursor(dictionary=True)
 
+    def listar_empleados(self):
+        self.cursor.execute("SELECT * FROM employees")
+        empleados = self.cursor.fetchall()
+        return empleados
+
+    def consultar_empleado_id(self, id):
+        self.cursor.execute("SELECT * FROM employees WHERE id = %s", (id,))
+        return self.cursor.fetchone()
+
+    def consultar_empleado_nombre(self, userquery):
+        words = userquery.split()
+
+        query = "SELECT DISTINCT * FROM employees WHERE "
+        conditions = ["firstname LIKE %s OR lastname LIKE %s" for _ in words]
+        query += " OR ".join(conditions)
+
+        params = []
+        for word in words:
+            word_param = f"%{word}%"
+            params.extend([word_param, word_param])
+
+        self.cursor.execute(query, params)
+        return self.cursor.fetchall()
+
     def agregar_empleado(
         self, firstname, lastname, position, age, start_date, salary, email, photo
     ):
-        sql = "INSERT INTO employees (firstname, lastname, position, age, start_date, salary, email, photo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
-        valores = (firstname, lastname, position, age, start_date, salary, email, photo)
+        query = "INSERT INTO employees (firstname, lastname, position, age, start_date, salary, email, photo) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+        values = (firstname, lastname, position, age, start_date, salary, email, photo)
 
-        self.cursor.execute(sql, valores)
+        self.cursor.execute(query, values)
         self.conn.commit()
         return self.cursor.lastrowid
-
-    def consultar_empleado(self, id):
-        self.cursor.execute(f"SELECT * FROM employees WHERE id = {id}")
-        return self.cursor.fetchone()
 
     def modificar_empleado(
         self, id, firstname, lastname, position, age, start_date, salary, email, photo
     ):
-        sql = "UPDATE employees SET firstname = %s, lastname = %s, position = %s, age = %s, start_date = %s, salary = %s, email = %s, photo = %s WHERE id = %s"
-        valores = (
+        query = "UPDATE employees SET firstname = %s, lastname = %s, position = %s, age = %s, start_date = %s, salary = %s, email = %s, photo = %s WHERE id = %s"
+        values = (
             firstname,
             lastname,
             position,
@@ -70,17 +90,12 @@ class GestionEmpleados:
             id,
         )
 
-        self.cursor.execute(sql, valores)
+        self.cursor.execute(query, values)
         self.conn.commit()
         return self.cursor.rowcount > 0
 
-    def listar_empleados(self):
-        self.cursor.execute("SELECT * FROM employees")
-        empleados = self.cursor.fetchall()
-        return empleados
-
     def eliminar_empleado(self, id):
-        self.cursor.execute(f"DELETE FROM employees WHERE id = {id}")
+        self.cursor.execute("DELETE FROM employees WHERE id = %s", (id))
         self.conn.commit()
         return self.cursor.rowcount > 0
 
@@ -97,13 +112,17 @@ def listar_empleados():
     return jsonify(lista_empleados)
 
 
-@app.route("/empleados/<int:id>", methods=["GET"])
-def mostrar_empleado(id):
-    empleado = empleados.consultar_empleado(id)
-    if empleado:
-        return jsonify(empleado), 200
+@app.route("/empleados/<string:userquery>", methods=["GET"])
+def mostrar_empleado(userquery):
+    if userquery.isdigit():
+        empleado = empleados.consultar_empleado_id(int(userquery))
+        if empleado:
+            return jsonify(empleado), 200
+        else:
+            return jsonify({"mensaje": "Empleado no encontrado"}), 404
     else:
-        return jsonify({"mensaje": "Empleado no encontrado"}), 404
+        lista_empleados = empleados.consultar_empleado_nombre(userquery)
+        return jsonify(lista_empleados)
 
 
 @app.route("/empleados", methods=["POST"])
@@ -125,7 +144,7 @@ def agregar_empleado():
             201,
         )
     else:
-        return jsonify({"mensaje": "Error al agregar empleado"}), 500
+        return jsonify({"mensaje": "Error del servidor al agregar empleado"}), 500
 
 
 @app.route("/empleados/<int:id>", methods=["PUT"])
@@ -153,7 +172,11 @@ def eliminar_empleado(id):
         return jsonify({"mensaje": "Empleado eliminado correctamente"}), 200
     else:
         return (
-            jsonify({"mensaje": "Error al eliminar empleado o empleado no encontrado"}),
+            jsonify(
+                {
+                    "mensaje": "Error del servidor al eliminar empleado o empleado no encontrado"
+                }
+            ),
             500,
         )
 
