@@ -156,7 +156,7 @@ nav a:last-child {
     float: right;
 }
 
-.topSectionRightCol .form-check:hover label {
+.topSectionRightCol .form-check label:hover {
     font-weight: 700;
     cursor: pointer;
 }
