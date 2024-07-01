@@ -1,10 +1,11 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify, render_template
 from flask import request
 from flask_cors import CORS
 import mysql.connector
+import os
 
 
-app = Flask(__name__)
+app = Flask(__name__, template_folder=os.path.abspath(os.path.dirname(__file__)))
 CORS(app)
 
 
@@ -101,8 +102,16 @@ class GestionEmpleados:
 
 
 empleados = GestionEmpleados(
-    host="localhost", user="root", password="root", database="cac_fspy_employees"
+    host="lautarocolella.mysql.pythonanywhere-services.com",
+    user="lautarocolella",
+    password="rootroot",
+    database="lautarocolella$cac_fspy_employees",
 )
+
+
+@app.route("/")
+def index():
+    return render_template("index.html")
 
 
 @app.route("/empleados", methods=["GET"])
@@ -181,4 +190,4 @@ def eliminar_empleado(id):
 
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()

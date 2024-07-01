@@ -1,7 +1,4 @@
-const APIURL = "http://127.0.0.1:5000/";
-
-// Al subir al servidor, deberá utilizarse la siguiente ruta. USUARIO debe ser reemplazado por el nombre de usuario de Pythonanywhere
-// const APIURL = "https://USUARIO.pythonanywhere.com/";
+const APIURL = "https://lautarocolella.pythonanywhere.com/";
 
 document.addEventListener("DOMContentLoaded", () => {
 	const searchForm = document.getElementById('searchEmployeeForm');
