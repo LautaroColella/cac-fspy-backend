@@ -13,6 +13,13 @@ document.addEventListener("DOMContentLoaded", () => {
 	const createEmployeeForm = document.getElementById('createEmployeeForm');
 	createEmployeeForm.addEventListener('submit', (e) => { handleCreateEmployee(e) });
 	createEmployeeForm.addEventListener('reset', () => getEmployees());
+
+	const editEmployeeForm = document.getElementById('editEmployeeForm');
+	editEmployeeForm.addEventListener('submit', (e) => { handleEditEmployee(e) });
+	editEmployeeForm.addEventListener('reset', () => getEmployees());
+
+	const listUsersButton = document.getElementById('listUsersButton');
+	listUsersButton.addEventListener('click', () => getEmployees());
 	getEmployees();
 });
 
@@ -130,6 +137,8 @@ async function handleCreateEmployee(e) {
 			displayAlert(false, data.mensaje);
 			if (!Array.isArray(dataEmp)) dataEmp = [dataEmp];
 			displayEmployees(dataEmp);
+			const goBack = document.querySelector('.goBackButton');
+			goBack.classList.remove('hideElem');
 		} catch (error) {
 			console.error('Error:', error);
 		}
@@ -138,8 +147,89 @@ async function handleCreateEmployee(e) {
 	}
 }
 
+let currEditingId = 0;
 function displayEditEmployee(employee) {
-	console.log('asd');
+	hideAll();
+	const empEdit = document.querySelector('.editEmployeeSection');
+	empEdit.classList.remove('hideElem');
+
+	currEditingId = employee.id;
+
+	const savedDate = new Date(employee.start_date);
+	const dateFormatted = `${savedDate.getFullYear()}-${('0' + (savedDate.getMonth() + 1)).slice(-2)}-${('0' + savedDate.getDate()).slice(-2)}`;
+
+	document.getElementById('editFirstname').value = employee.firstname;
+	document.getElementById('editLastname').value = employee.lastname;
+	document.getElementById('editEmail').value = employee.email;
+	document.getElementById('editPosition').value = employee.position;
+	document.getElementById('editAge').value = employee.age;
+	document.getElementById('editStart').value = dateFormatted;
+	document.getElementById('editSalary').value = employee.salary;
+	document.getElementById('editPhoto').value = employee.photo;
+}
+
+async function handleEditEmployee(e) {
+	e.preventDefault();
+
+	const editEmployeeForm = document.getElementById('editEmployeeForm');
+
+	const formData = new FormData(editEmployeeForm);
+	const formDataJSON = {};
+
+	formData.forEach((value, key) => {
+		formDataJSON[key] = value;
+	});
+
+	const userInput = {
+		"firstname": formDataJSON["firstname"],
+		"lastname": formDataJSON["lastname"],
+		"position": formDataJSON["position"],
+		"age": formDataJSON["age"],
+		"start_date": formDataJSON["start_date"],
+		"salary": formDataJSON["salary"],
+		"email": formDataJSON["email"],
+		"photo": formDataJSON["photo"]
+	};
+
+	const validInput = validateEmployee(userInput);
+	if (Object.keys(validInput).length === 0) {
+		return;
+	}
+
+	const reqOptions = {
+		method: 'PUT',
+		headers: {
+			'Content-Type': 'application/json'
+		},
+		body: JSON.stringify(validInput)
+	}
+
+	try {
+		const response = await fetch(APIURL + "empleados/" + currEditingId, reqOptions);
+		const data = await response.json();
+		if (data.error) {
+			displayAlert(true, data.error);
+			throw new Error(data.error);
+		}
+		try {
+			const response = await fetch(APIURL + "empleados/" + currEditingId);
+			let dataEmp = await response.json();
+			if (dataEmp.error) {
+				displayAlert(true, dataEmp.error);
+				throw new Error(dataEmp.error);
+			}
+			displayAlert(false, data.mensaje);
+			if (!Array.isArray(dataEmp)) dataEmp = [dataEmp];
+			displayEmployees(dataEmp);
+			currEditingId = 0;
+			const goBack = document.querySelector('.goBackButton');
+			goBack.classList.remove('hideElem');
+		} catch (error) {
+			console.error('Error:', error);
+		}
+	} catch (error) {
+		console.error('Error:', error);
+	}
 }
 
 async function deleteEmployee(empId, fullname) {
@@ -154,6 +244,7 @@ async function deleteEmployee(empId, fullname) {
 			displayAlert(false, data.mensaje);
 			const cardToDel = document.querySelector('[data-emp-id="' + empId + '"]');
 			if (cardToDel) cardToDel.remove();
+			getEmployees();
 		} catch (error) {
 			console.error('Error:', error);
 		}
@@ -384,6 +475,8 @@ function hideAll() {
 	empCreate.classList.add('hideElem');
 	const empEdit = document.querySelector('.editEmployeeSection');
 	empEdit.classList.add('hideElem');
+	const goBack = document.querySelector('.goBackButton');
+	goBack.classList.add('hideElem');
 }
 
 let isShowingAlert = false;
