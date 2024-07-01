@@ -1,6 +1,6 @@
 # Employee Management System
 
-This is a demo application for the final project of "Codo a codo Full Stack Python" that allows managing employees in an enterprise. The application includes a backend REST API built with Flask in Python and a frontend interface built with HTML, CSS, Bootstrap, and JavaScript. The backend connects to a MySQL database and allows for CRUD operations. You can view the live demo at: [pythonanywhere](lautarocolella.pythonanywhere.com)
+This is a demo application for the final project of "Codo a codo Full Stack Python" that allows managing employees in an enterprise. The application includes a backend REST API built with Flask in Python and a frontend interface built with HTML, CSS, Bootstrap, and JavaScript. The backend connects to a MySQL database and allows for CRUD operations. You can view the live demo at: [pythonanywhere](https://lautarocolella.pythonanywhere.com)
 
 ## Table of Contents
 
