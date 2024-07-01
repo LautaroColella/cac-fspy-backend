@@ -161,6 +161,10 @@ nav a:last-child {
     cursor: pointer;
 }
 
+main {
+    margin-top: 50px;
+}
+
 .employeeList {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(500px, 500px));
@@ -199,7 +203,9 @@ nav a:last-child {
     right: 5px;
 }
 
-
+.hideElem {
+    display: none;
+}
 
 @keyframes slideInRight {
     from {
