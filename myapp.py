@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify
 from flask import request
 from flask_cors import CORS
 import mysql.connector
@@ -103,7 +103,6 @@ class GestionEmpleados:
 empleados = GestionEmpleados(
     host="localhost", user="root", password="root", database="cac_fspy_employees"
 )
-# empleados = GestionEmpleados(host='USUARIO.mysql.pythonanywhere-services.com', user='USUARIO', password='CLAVE', database='USUARIO$miapp')
 
 
 @app.route("/empleados", methods=["GET"])
